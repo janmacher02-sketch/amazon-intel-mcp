@@ -1,0 +1,54 @@
+name: amazon-intel-mcp
+displayName: Amazon Competitive Intelligence
+description: |
+  Amazon product research and competitive intelligence for AI assistants.
+  Search products, track BSR rankings, compare ASINs, analyze keywords,
+  and monitor best sellers. Built for Amazon FBA sellers and e-commerce brands.
+version: 1.0.0
+license: MIT
+categories:
+  - ecommerce
+  - amazon
+  - competitive-intelligence
+  - business
+tags:
+  - amazon
+  - bsr
+  - pricing
+  - buy-box
+  - keyword-research
+  - fba
+  - ecommerce
+startCommand:
+  type: http
+  configSchema:
+    type: object
+    properties:
+      amazonAccessKey:
+        type: string
+        title: Amazon PA-API Access Key
+        description: "From Amazon Associates → Product Advertising API"
+      amazonSecretKey:
+        type: string
+        title: Amazon PA-API Secret Key
+      amazonPartnerTag:
+        type: string
+        title: Amazon Associates Partner Tag
+        description: "e.g. 'mystore-20'"
+      keepaApiKey:
+        type: string
+        title: Keepa API Key (Optional)
+        description: "Required for BSR history and best sellers tracking"
+      apiKey:
+        type: string
+        title: API Key (Optional)
+        description: "Remove the 10 calls/day limit."
+    required:
+      - amazonAccessKey
+      - amazonSecretKey
+      - amazonPartnerTag
+  exampleConfig:
+    amazonAccessKey: "AKIAIOSFODNN7EXAMPLE"
+    amazonSecretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    amazonPartnerTag: "mystore-20"
+    keepaApiKey: "your_keepa_key"
