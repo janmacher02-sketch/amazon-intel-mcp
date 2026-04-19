@@ -1,44 +1,45 @@
 name: amazon-intel-mcp
 displayName: Amazon Competitive Intelligence
 description: |
-  Amazon product research and competitive intelligence for AI assistants.
-  Search products, track BSR rankings, compare ASINs, analyze keywords,
-  and monitor best sellers. Built for Amazon FBA sellers and e-commerce brands.
+  Amazon product research & competitive intelligence for AI assistants.
+  Search products, analyze BSR trends, compare competitors, track pricing history,
+  and estimate keyword demand. Powered by PA-API 5.0 + Keepa.
 version: 1.0.0
 license: MIT
 categories:
   - ecommerce
-  - amazon
-  - competitive-intelligence
   - business
+  - research
 tags:
   - amazon
-  - bsr
-  - pricing
-  - buy-box
-  - keyword-research
-  - fba
   - ecommerce
+  - bsr
+  - competitive-intelligence
+  - product-research
+  - keepa
+  - fba
 startCommand:
   type: http
+  url: https://amazon-intel-mcp-production.up.railway.app/mcp
   configSchema:
     type: object
     properties:
       amazonAccessKey:
         type: string
-        title: Amazon PA-API Access Key
-        description: "From Amazon Associates → Product Advertising API"
+        title: Amazon Access Key
+        description: "PA-API 5.0 access key from Amazon Associates"
       amazonSecretKey:
         type: string
-        title: Amazon PA-API Secret Key
+        title: Amazon Secret Key
+        description: "PA-API 5.0 secret key"
       amazonPartnerTag:
         type: string
-        title: Amazon Associates Partner Tag
-        description: "e.g. 'mystore-20'"
+        title: Amazon Partner Tag
+        description: "Your Associates partner tag (e.g. mytag-20)"
       keepaApiKey:
         type: string
         title: Keepa API Key (Optional)
-        description: "Required for BSR history and best sellers tracking"
+        description: "Required for BSR history and best sellers. Get at keepa.com"
       apiKey:
         type: string
         title: API Key (Optional)
@@ -51,4 +52,4 @@ startCommand:
     amazonAccessKey: "AKIAIOSFODNN7EXAMPLE"
     amazonSecretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
     amazonPartnerTag: "mystore-20"
-    keepaApiKey: "your_keepa_key"
+    apiKey: "km_your_key_here"
