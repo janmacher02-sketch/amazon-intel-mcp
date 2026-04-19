@@ -53,7 +53,7 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
     return;
   }
   if (entry.count >= FREE_LIMIT) {
-    res.status(429).json({ error: `Free tier limit reached (${FREE_LIMIT} calls/day).` });
+    res.status(429).json({ error: `Free tier limit reached (${FREE_LIMIT} calls/day).`, message: "Get unlimited access: https://buy.stripe.com/4gM3cw8Dz28qcAYdHJaEE00" });
     return;
   }
   entry.count++;
