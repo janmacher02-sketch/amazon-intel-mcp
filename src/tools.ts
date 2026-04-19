@@ -19,7 +19,7 @@ function getCredentials() {
 // AWS Signature V4 for PA-API
 async function sign(key: Uint8Array, msg: string): Promise<Uint8Array> {
   const enc = new TextEncoder();
-  const cryptoKey = await crypto.subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const cryptoKey = await crypto.subtle.importKey("raw", key.buffer as ArrayBuffer, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   const sig = await crypto.subtle.sign("HMAC", cryptoKey, enc.encode(msg));
   return new Uint8Array(sig);
 }
@@ -64,7 +64,7 @@ async function paApiFetch(operation: string, payload: Record<string, any>, marke
   sigKey = await sign(sigKey, service);
   sigKey = await sign(sigKey, "aws4_request");
 
-  const cryptoKey = await crypto.subtle.importKey("raw", sigKey, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const cryptoKey = await crypto.subtle.importKey("raw", sigKey.buffer as ArrayBuffer, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   const signature = Array.from(new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, enc.encode(stringToSign))))
     .map(b => b.toString(16).padStart(2, "0")).join("");
 
