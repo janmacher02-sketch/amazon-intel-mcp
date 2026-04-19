@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from "express";
-import { Unkey } from "@unkey/api";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { registerTools } from "./tools.js";
@@ -7,26 +6,36 @@ import { registerTools } from "./tools.js";
 const app = express();
 app.use(express.json());
 
-// ─── Unkey middleware ─────────────────────────────────────────────────────────
+// ─── Auth middleware (Unkey via REST) ─────────────────────────────────────────
 
-const unkey = new Unkey({ rootKey: process.env.UNKEY_ROOT_KEY! });
-const UNKEY_API_ID = process.env.UNKEY_API_ID!;
+const UNKEY_API_ID = process.env.UNKEY_API_ID ?? "";
 
 const freeCalls = new Map<string, { count: number; resetAt: number }>();
 const FREE_LIMIT = 10;
+
+async function verifyKeyViaRest(apiKey: string): Promise<{ valid: boolean; remaining?: number; reset?: number }> {
+  const res = await fetch("https://api.unkey.dev/v1/keys.verifyKey", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key: apiKey, apiId: UNKEY_API_ID }),
+  });
+  if (!res.ok) return { valid: false };
+  const data = await res.json() as any;
+  return { valid: data.valid === true, remaining: data.remaining, reset: data.ratelimit?.reset };
+}
 
 async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers["authorization"] ?? "";
   const apiKey = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : (req.headers["x-api-key"] as string ?? "");
 
   if (apiKey) {
-    const { result, error } = await unkey.keys.verify({ key: apiKey, apiId: UNKEY_API_ID });
-    if (error || !result?.valid) {
+    const result = await verifyKeyViaRest(apiKey);
+    if (!result.valid) {
       res.status(401).json({ error: "Invalid API key." });
       return;
     }
-    if (result.ratelimit && result.remaining === 0) {
-      res.status(429).json({ error: "Rate limit exceeded.", resetAt: result.ratelimit.reset });
+    if (result.remaining !== undefined && result.remaining <= 0) {
+      res.status(429).json({ error: "Rate limit exceeded.", resetAt: result.reset });
       return;
     }
     next();
