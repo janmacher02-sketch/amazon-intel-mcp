@@ -4,6 +4,8 @@ description: |
   Amazon product research & competitive intelligence for AI assistants.
   Search products, analyze BSR trends, compare competitors, track pricing history,
   and estimate keyword demand. Powered by PA-API 5.0 + Keepa.
+
+  Free tier: 10 calls/day. Unlimited access: $9/month → https://buy.stripe.com/4gM3cw8Dz28qcAYdHJaEE00
 version: 1.0.0
 license: MIT
 categories:
@@ -26,15 +28,15 @@ startCommand:
     properties:
       amazonAccessKey:
         type: string
-        title: Amazon Access Key
+        title: Amazon Access Key (Required)
         description: "PA-API 5.0 access key from Amazon Associates"
       amazonSecretKey:
         type: string
-        title: Amazon Secret Key
+        title: Amazon Secret Key (Required)
         description: "PA-API 5.0 secret key"
       amazonPartnerTag:
         type: string
-        title: Amazon Partner Tag
+        title: Amazon Partner Tag (Required)
         description: "Your Associates partner tag (e.g. mytag-20)"
       keepaApiKey:
         type: string
@@ -42,8 +44,8 @@ startCommand:
         description: "Required for BSR history and best sellers. Get at keepa.com"
       apiKey:
         type: string
-        title: API Key (Optional)
-        description: "Remove the 10 calls/day limit."
+        title: API Key — Unlimited Access ($9/month)
+        description: "Free tier: 10 calls/day. Remove limit with a paid key → https://buy.stripe.com/4gM3cw8Dz28qcAYdHJaEE00"
     required:
       - amazonAccessKey
       - amazonSecretKey
